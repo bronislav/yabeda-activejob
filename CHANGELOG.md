@@ -2,4 +2,4 @@
 
 - Initial release of yabeda-activejob gem. @etsenake
 
-  Yabeda metrics around rails activejobs.
+  Yabeda metrics around rails activejobs. See Readme for more details
