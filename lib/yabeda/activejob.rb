@@ -17,21 +17,21 @@ module Yabeda
         group :activejob
 
         counter :executed_total, tags: %i[queue activejob executions],
-                                     comment: "A counter of the total number of activejobs executed."
+                                 comment: "A counter of the total number of activejobs executed."
         counter :success_total, tags: %i[queue activejob executions],
-                                    comment: "A counter of the total number of activejobs successfully processed."
+                                comment: "A counter of the total number of activejobs successfully processed."
         counter :failed_total, tags: %i[queue activejob executions failure_reason],
-                                   comment: "A counter of the total number of jobs failed for an activejob."
+                               comment: "A counter of the total number of jobs failed for an activejob."
 
         histogram :runtime, comment: "A histogram of the activejob execution time.",
-                                unit: :seconds, per: :activejob,
-                                tags: %i[queue activejob executions],
-                                buckets: LONG_RUNNING_JOB_RUNTIME_BUCKETS
+                            unit: :seconds, per: :activejob,
+                            tags: %i[queue activejob executions],
+                            buckets: LONG_RUNNING_JOB_RUNTIME_BUCKETS
 
         histogram :latency, comment: "The job latency, the difference in seconds between enqueued and running time",
-                                unit: :seconds, per: :activejob,
-                                tags: %i[queue activejob executions],
-                                buckets: LONG_RUNNING_JOB_RUNTIME_BUCKETS
+                            unit: :seconds, per: :activejob,
+                            tags: %i[queue activejob executions],
+                            buckets: LONG_RUNNING_JOB_RUNTIME_BUCKETS
 
         # job complete event
         ActiveSupport::Notifications.subscribe "perform.active_job" do |*args|
