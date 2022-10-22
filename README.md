@@ -1,4 +1,8 @@
 # Yabeda::ActiveJob
+![Tests](https://github.com/Fullscript/yabeda-activejob/actions/workflows/test.yml/badge.svg)
+![Release](https://github.com/Fullscript/yabeda-activejob/actions/workflows/build-release.yml/badge.svg)
+![Rubocop](https://github.com/Fullscript/yabeda-activejob/actions/workflows/lint.yml/badge.svg)
+
 Yabeda metrics around rails activejobs. The motivation came from wanting something similar to [yabeda-sidekiq](https://github.com/yabeda-rb/yabeda-sidekiq) for
 resque but decided to generalize even more with just doing it on the activejob level since that is likely more in use
 than just resque. and could implement a lot of the general metrics needed without having to leverage your used adapters
