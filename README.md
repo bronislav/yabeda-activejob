@@ -1,6 +1,3 @@
-# NOT READY FOR USE
-### STILL DEBUGGING SOME METRICS 
-
 # Yabeda::ActiveJob
 Yabeda metrics around rails activejobs. The motivation came from wanting something similar to [yabeda-sidekiq](https://github.com/yabeda-rb/yabeda-sidekiq) for
 resque but decided to generalize even more with just doing it on the activejob level since that is likely more in use
@@ -16,20 +13,26 @@ Add this line to your application's Gemfile:
 
 ```ruby
 gem 'yabeda-activejob'
+# Then add monitoring system adapter, e.g.:
+# gem 'yabeda-prometheus'
 ```
 
-And then execute:
-```bash
-$ bundle
+### Registering metrics on server process start
+
+Currently, yabeda-activejob does not automatically install on your rails server (this will be added in the future). For now to install
+you can do the following: 
+```ruby
+# config/initializers/yabeda.rb
+  Yabeda::ActiveJob.install!
 ```
 
-Or install it yourself as:
-```bash
-$ gem install yabeda-activejob
-```
+## Metrics
 
-## Contributing
-Contribution directions go here.
+- Total jobs processed: `activejob.job_executed_total`
+- Total successful jobs processed: `activejob.job_success_total`
+- Total failed jobs processed: `activejob.job_failed_total`
+- Job runtime: `activejob.job_runtime` (in seconds)
+- Job latency: `activejob.job_latency` (in seconds)
 
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
