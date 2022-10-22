@@ -29,6 +29,8 @@ RSpec/MultipleExpectations:
 
 Bundler/OrderedGems:
   Enabled: false
+Gemspec/RequireMFA:
+  Enabled: false
 
 Style/TrailingCommaInArguments:
   Description: 'Checks for trailing comma in argument lists.'
