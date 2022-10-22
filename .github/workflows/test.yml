@@ -51,3 +51,6 @@ jobs:
           bundle update
       - name: Run RSpec
         run: bundle exec rspec
+      - uses: joshmfrankel/simplecov-check-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
