@@ -1,4 +1,4 @@
-name: Rubocop
+name: SimpleCov
 on:
   pull_request:
     branches:
@@ -11,7 +11,7 @@ permissions:
   pull-requests: write
 jobs:
   rubocop:
-    name: runner / rubocop
+    name: Code Coverage
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
