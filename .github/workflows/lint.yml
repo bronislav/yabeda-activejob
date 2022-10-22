@@ -1,25 +1,27 @@
-name: Lint
-
+name: reviewdog
 on:
   pull_request:
+    branches:
+      - main
   push:
     branches:
-      - '**'
-    tags-ignore:
-      - 'v*'
-
+      - main
+permissions:
+  contents: read
+  pull-requests: write
 jobs:
   rubocop:
-    # Skip running tests for local pull requests (use push event instead), run only for foreign ones
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.owner.login != github.event.pull_request.base.repo.owner.login
-    name: RuboCop
+    name: runner / rubocop
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v1
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1"
-          bundler-cache: true
-      - name: Lint Ruby code with RuboCop
-        run: |
-          bundle exec rubocop
+          ruby-version: 3.0.0
+      - name: rubocop
+        uses: reviewdog/action-rubocop@v2
+        with:
+          rubocop_version: gemfile
+          rubocop_extensions: rubocop-rails:gemfile rubocop-rspec:gemfile
+          reporter: github-pr-review # Default is github-pr-check

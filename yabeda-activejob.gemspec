@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.description              = "Prometheus exporter for collecting metrics around your activejobs"
   spec.homepage                 = "https://github.com/Fullscript/yabeda-activejob"
   spec.license                  = "MIT"
-  spec.required_ruby_version    = ">= 2.7.3"
+  spec.required_ruby_version    = ">= 2.5"
   spec.files                    = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   spec.metadata["homepage_uri"]          = spec.homepage
@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.metadata["changelog_uri"]         = "#{spec.homepage}/CHANGELOG.md"
   spec.metadata["rubygems_mfa_required"] = "true"
 
-  spec.add_dependency "rails", ">= 4.2"
+  spec.add_dependency "rails", ">= 5.2"
   spec.add_dependency "yabeda", "~> 0.6"
 
   spec.add_development_dependency "bundler", "~> 2.0"
