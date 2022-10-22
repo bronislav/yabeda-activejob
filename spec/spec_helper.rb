@@ -7,6 +7,9 @@ require "yabeda/activejob"
 require "yabeda/rspec"
 require_relative "support/rails_app"
 require "rspec/rails"
+require 'simplecov'
+SimpleCov.start
+
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
