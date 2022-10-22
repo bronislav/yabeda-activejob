@@ -16,19 +16,19 @@ module Yabeda
       Yabeda.configure do
         group :activejob
 
-        counter :job_executed_total, tags: %i[queue activejob executions],
+        counter :executed_total, tags: %i[queue activejob executions],
                                      comment: "A counter of the total number of activejobs executed."
-        counter :job_success_total, tags: %i[queue activejob executions],
+        counter :success_total, tags: %i[queue activejob executions],
                                     comment: "A counter of the total number of activejobs successfully processed."
-        counter :job_failed_total, tags: %i[queue activejob executions failure_reason],
+        counter :failed_total, tags: %i[queue activejob executions failure_reason],
                                    comment: "A counter of the total number of jobs failed for an activejob."
 
-        histogram :job_runtime, comment: "A histogram of the activejob execution time.",
+        histogram :runtime, comment: "A histogram of the activejob execution time.",
                                 unit: :seconds, per: :activejob,
                                 tags: %i[queue activejob executions],
                                 buckets: LONG_RUNNING_JOB_RUNTIME_BUCKETS
 
-        histogram :job_latency, comment: "The job latency, the difference in seconds between enqueued and running time",
+        histogram :latency, comment: "The job latency, the difference in seconds between enqueued and running time",
                                 unit: :seconds, per: :activejob,
                                 tags: %i[queue activejob executions],
                                 buckets: LONG_RUNNING_JOB_RUNTIME_BUCKETS
@@ -44,15 +44,15 @@ module Yabeda
             executions: event.payload[:job].instance_variable_get(:@executions).to_s,
           }
           if event.payload[:exception].present?
-            activejob_job_failed_total.increment(
-              labels.merge(failure_reason: event.payload[:exception].join(",")),
+            activejob_failed_total.increment(
+              labels.merge(failure_reason: event.payload[:exception].first.to_s),
             )
           else
-            activejob_job_success_total.increment(labels)
+            activejob_success_total.increment(labels)
           end
 
-          activejob_job_executed_total.increment(labels)
-          activejob_job_runtime.measure(labels, Yabeda::ActiveJob.ms2s(event.duration))
+          activejob_executed_total.increment(labels)
+          activejob_runtime.measure(labels, Yabeda::ActiveJob.ms2s(event.duration))
         end
 
         # start job event
@@ -68,7 +68,7 @@ module Yabeda
           ::Rails.logger.info(labels.inspect)
 
           labels.merge!(event.payload.slice(*Yabeda.default_tags.keys - labels.keys))
-          activejob_job_latency.measure(labels, Yabeda::ActiveJob.job_latency(event))
+          activejob_latency.measure(labels, Yabeda::ActiveJob.job_latency(event))
         end
       end
     end

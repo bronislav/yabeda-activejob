@@ -32,11 +32,11 @@ you can do the following:
 
 ## Metrics
 
-- Total jobs processed: `activejob.job_executed_total`
-- Total successful jobs processed: `activejob.job_success_total`
-- Total failed jobs processed: `activejob.job_failed_total`
-- Job runtime: `activejob.job_runtime` (in seconds)
-- Job latency: `activejob.job_latency` (in seconds)
+- Total jobs processed: `activejob.executed_total`
+- Total successful jobs processed: `activejob.success_total`
+- Total failed jobs processed: `activejob.failed_total`
+- Job runtime: `activejob.runtime` (in seconds)
+- Job latency: `activejob.latency` (in seconds)
 
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).

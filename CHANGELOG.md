@@ -1,3 +1,9 @@
+## 0.2.0 - 20220-10-22
+
+- Change metric names such that they no longer sound repetitive when using the word job, eg `activejob_job_success_total` is now `activejob_success_total`. See Readme for more details.
+- Added some badges to repo
+- Remove erroneous put statement
+
 ## 0.1.0 - 20220-10-21
 
 - Initial release of yabeda-activejob gem. @etsenake
