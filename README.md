@@ -1,6 +1,6 @@
 # Yabeda::ActiveJob
+[![Gem Version](https://badge.fury.io/rb/yabeda-activejob.svg)](https://badge.fury.io/rb/yabeda-activejob)
 ![Tests](https://github.com/Fullscript/yabeda-activejob/actions/workflows/test.yml/badge.svg)
-![Release](https://github.com/Fullscript/yabeda-activejob/actions/workflows/build-release.yml/badge.svg)
 ![Rubocop](https://github.com/Fullscript/yabeda-activejob/actions/workflows/lint.yml/badge.svg)
 
 Yabeda metrics around rails activejobs. The motivation came from wanting something similar to [yabeda-sidekiq](https://github.com/yabeda-rb/yabeda-sidekiq) for

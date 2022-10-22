@@ -59,7 +59,6 @@ module Yabeda
         ActiveSupport::Notifications.subscribe "perform_start.active_job" do |*args|
           event = ActiveSupport::Notifications::Event.new(*args)
           ::Rails.logger.debug("JOB START")
-          puts "JOB START"
 
           labels = {
             activejob: event.payload[:job].class.to_s,
