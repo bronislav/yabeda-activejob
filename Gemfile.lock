@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    yabeda-activejob (0.1.0)
+    yabeda-activejob (0.2.0)
       rails (>= 5.2)
       yabeda (~> 0.6)
 
@@ -160,7 +160,7 @@ GEM
       rspec-mocks (~> 3.11)
       rspec-support (~> 3.11)
     rspec-support (3.11.1)
-    ruby-next-core (0.15.2)
+    ruby-next-core (0.15.3)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
