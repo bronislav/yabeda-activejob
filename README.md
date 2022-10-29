@@ -32,6 +32,7 @@ you can do the following:
 
 ## Metrics
 
+- Total enqueued jobs: `activejob.enqueued_total`
 - Total jobs processed: `activejob.executed_total`
 - Total successful jobs processed: `activejob.success_total`
 - Total failed jobs processed: `activejob.failed_total`
