@@ -1,3 +1,7 @@
+## 0.3.1 - 20220-10-29
+
+- Fix a bug where when `enqueued_at` was not set on instance variable lead to failure
+
 ## 0.3.0 - 20220-10-29
 
 - Add enqueued_total counter

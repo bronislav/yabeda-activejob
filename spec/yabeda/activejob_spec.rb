@@ -43,6 +43,16 @@ RSpec.describe Yabeda::ActiveJob, type: :integration do
         .with_tags(queue: "default", activejob: "HelloJob", executions: "1")
         .with(be_between(1, 2))
     end
+
+    context "when enqueued_at is not present" do
+      it "does not measure job latency" do
+        ActiveJob::Base.queue_adapter = :test
+        expect_any_instance_of(HelloJob).to receive(:enqueued_at).and_return(nil).twice # rubocop:disable RSpec/AnyInstance
+        expect { HelloJob.perform_later }.to have_enqueued_job.on_queue("default")
+        sleep(1)
+        expect { perform_enqueued_jobs }.not_to measure_yabeda_histogram(Yabeda.activejob.latency)
+      end
+    end
   end
 
   context "when job fails" do
