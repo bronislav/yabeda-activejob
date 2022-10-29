@@ -1,3 +1,7 @@
+## 0.3.0 - 20220-10-29
+
+- Add enqueued_total counter
+
 ## 0.2.0 - 20220-10-22
 
 - Change metric names such that they no longer sound repetitive when using the word job, eg `activejob_job_success_total` is now `activejob_success_total`. See Readme for more details.

@@ -77,4 +77,17 @@ RSpec.describe Yabeda::ActiveJob, type: :integration do
         .and(raise_error(StandardError))
     end
   end
+
+  context "when job is enqueued" do
+    it "increments enqueued job counter" do
+      ActiveJob::Base.queue_adapter = :test
+      expect do
+        HelloJob.perform_later
+      end.to have_enqueued_job.on_queue("default").and(
+        increment_yabeda_counter(Yabeda.activejob.enqueued_total)
+          .with_tags(queue: "default", activejob: "HelloJob", executions: "0")
+          .by(1),
+      )
+    end
+  end
 end

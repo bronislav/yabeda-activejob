@@ -18,6 +18,8 @@ module Yabeda
 
         counter :executed_total, tags: %i[queue activejob executions],
                                  comment: "A counter of the total number of activejobs executed."
+        counter :enqueued_total, tags: %i[queue activejob executions],
+                                 comment: "A counter of the total number of activejobs enqueued."
         counter :success_total, tags: %i[queue activejob executions],
                                 comment: "A counter of the total number of activejobs successfully processed."
         counter :failed_total, tags: %i[queue activejob executions failure_reason],
@@ -35,8 +37,6 @@ module Yabeda
 
         # job complete event
         ActiveSupport::Notifications.subscribe "perform.active_job" do |*args|
-          ::Rails.logger.debug("JOB COMPLETE")
-
           event = ActiveSupport::Notifications::Event.new(*args)
           labels = {
             activejob: event.payload[:job].class.to_s,
@@ -58,17 +58,28 @@ module Yabeda
         # start job event
         ActiveSupport::Notifications.subscribe "perform_start.active_job" do |*args|
           event = ActiveSupport::Notifications::Event.new(*args)
-          ::Rails.logger.debug("JOB START")
 
           labels = {
             activejob: event.payload[:job].class.to_s,
             queue: event.payload[:job].instance_variable_get(:@queue_name),
             executions: event.payload[:job].instance_variable_get(:@executions).to_s,
           }
-          ::Rails.logger.info(labels.inspect)
 
           labels.merge!(event.payload.slice(*Yabeda.default_tags.keys - labels.keys))
           activejob_latency.measure(labels, Yabeda::ActiveJob.job_latency(event))
+        end
+
+        ActiveSupport::Notifications.subscribe "enqueue.active_job" do |*args|
+          event = ActiveSupport::Notifications::Event.new(*args)
+
+          labels = {
+            activejob: event.payload[:job].class.to_s,
+            queue: event.payload[:job].instance_variable_get(:@queue_name),
+            executions: event.payload[:job].instance_variable_get(:@executions).to_s,
+          }
+
+          labels.merge!(event.payload.slice(*Yabeda.default_tags.keys - labels.keys))
+          activejob_enqueued_total.increment(labels)
         end
       end
     end
