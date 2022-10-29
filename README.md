@@ -36,7 +36,7 @@ end
 If using with resque:
 ```ruby
 # config/initializers/yabeda.rb or elsewhere
-    Yabeda::ActiveJob.install!
+Yabeda::ActiveJob.install!
 ```
 If using resque you may need to use [yabeda-prometheus-mmap](https://github.com/yabeda-rb/yabeda-prometheus-mmap) or set your storage type to direct file store so that the metrics are available
 to your collector. 
