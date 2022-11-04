@@ -9,12 +9,24 @@ RSpec.describe Yabeda::ActiveJob, type: :integration do
 
   before { ActiveJob::Base.queue_adapter = :inline }
 
+  after { described_class.after_event_block = proc {} }
+
   context "when job is successful" do
     it "increments successful job counter" do
       expect { HelloJob.perform_later }.to \
         increment_yabeda_counter(Yabeda.activejob.success_total)
         .with_tags(queue: "default", activejob: "HelloJob", executions: "1")
         .by(1)
+    end
+
+    it "runs the after_event_block successfully" do
+      random_double = double
+      allow(random_double).to receive(:hello).with(an_instance_of(ActiveSupport::Notifications::Event))
+      described_class.after_event_block = proc { |event| random_double.hello(event) }
+      proc { |event| random_double.hello(event) }
+      HelloJob.perform_later
+
+      expect(random_double).to have_received(:hello).exactly(3).times
     end
 
     it "does not increment failed job counter" do
@@ -86,11 +98,23 @@ RSpec.describe Yabeda::ActiveJob, type: :integration do
         .with(be_between(0.005, 0.05))
         .and(raise_error(StandardError))
     end
+
+    it "runs the after_event_block successfully" do
+      random_double = double
+      allow(random_double).to receive(:hello).with(an_instance_of(ActiveSupport::Notifications::Event))
+      described_class.after_event_block = proc { |event| random_double.hello(event) }
+      proc { |event| random_double.hello(event) }
+
+      expect { ErrorLongJob.perform_later }.to raise_error(StandardError)
+
+      expect(random_double).to have_received(:hello).exactly(3).times
+    end
   end
 
   context "when job is enqueued" do
+    before { ActiveJob::Base.queue_adapter = :test }
+
     it "increments enqueued job counter" do
-      ActiveJob::Base.queue_adapter = :test
       expect do
         HelloJob.perform_later
       end.to have_enqueued_job.on_queue("default").and(
@@ -98,6 +122,17 @@ RSpec.describe Yabeda::ActiveJob, type: :integration do
           .with_tags(queue: "default", activejob: "HelloJob", executions: "0")
           .by(1),
       )
+    end
+
+    it "runs the after_event_block successfully" do
+      random_double = double
+      allow(random_double).to receive(:hello).with(an_instance_of(ActiveSupport::Notifications::Event))
+      described_class.after_event_block = proc { |event| random_double.hello(event) }
+      proc { |event| random_double.hello(event) }
+
+      HelloJob.perform_later
+
+      expect(random_double).to have_received(:hello)
     end
   end
 end

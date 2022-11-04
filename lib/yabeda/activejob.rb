@@ -2,6 +2,7 @@
 
 require "yabeda"
 require "yabeda/activejob/version"
+require "active_support"
 
 module Yabeda
   # Small set of metrics on activejob jobs
@@ -10,6 +11,8 @@ module Yabeda
       0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, # standard (from Prometheus)
       30, 60, 120, 300, 1800, 3600, 21_600, # In cases jobs are very long-running
     ].freeze
+
+    mattr_accessor :after_event_block, default: proc { |_event| }
 
     # rubocop: disable Metrics/MethodLength, Metrics/BlockLength, Metrics/AbcSize
     def self.install!
@@ -53,6 +56,7 @@ module Yabeda
 
           activejob_executed_total.increment(labels)
           activejob_runtime.measure(labels, Yabeda::ActiveJob.ms2s(event.duration))
+          Yabeda::ActiveJob.after_event_block.call(event) if Yabeda::ActiveJob.after_event_block.respond_to?(:call)
         end
 
         # start job event
@@ -68,6 +72,7 @@ module Yabeda
           labels.merge!(event.payload.slice(*Yabeda.default_tags.keys - labels.keys))
           job_latency = Yabeda::ActiveJob.job_latency(event)
           activejob_latency.measure(labels, job_latency) if job_latency.present?
+          Yabeda::ActiveJob.after_event_block.call(event) if Yabeda::ActiveJob.after_event_block.respond_to?(:call)
         end
 
         ActiveSupport::Notifications.subscribe "enqueue.active_job" do |*args|
@@ -81,6 +86,7 @@ module Yabeda
 
           labels.merge!(event.payload.slice(*Yabeda.default_tags.keys - labels.keys))
           activejob_enqueued_total.increment(labels)
+          Yabeda::ActiveJob.after_event_block.call(event) if Yabeda::ActiveJob.after_event_block.respond_to?(:call)
         end
       end
     end

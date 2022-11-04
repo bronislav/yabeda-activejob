@@ -50,6 +50,21 @@ Prometheus::Client.config.data_store = Prometheus::Client::DataStores::DirectFil
 
 **Note** if using direct file datastore it must be called before registering any metrics. 
 
+If using `resque` with prometheus and scraping your resque process via the `/metrics` endpoint is unfeasible consider setting up a
+push gateway. Once set up, you can use the `after_event_block` to push metrics to your push gateway after every event is
+complete.
+
+````ruby
+Yabeda.configure do
+   Yabeda::ActiveJob.after_event_block = Proc.new do |event|
+      # do your pushing or any custom code here
+   end
+   Yabeda::ActiveJob.install!
+end
+````
+
+**Note**: Since the notifications are registered on install make sure to setup your after_event_block before calling install!
+
 ## Metrics
 
 - Total enqueued jobs: `activejob.enqueued_total` segmented by: queue, activejob(job class name), executions(number of executions)

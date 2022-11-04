@@ -8,6 +8,7 @@ require "yabeda/rspec"
 require_relative "support/rails_app"
 require "rspec/rails"
 require "simplecov"
+require "active_support"
 SimpleCov.start
 
 RSpec.configure do |config|

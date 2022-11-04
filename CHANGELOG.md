@@ -1,3 +1,7 @@
+## 0.4.0 - 20220-11-04
+
+- Add feature `after_event_block` it gets called with every notification
+
 ## 0.3.1 - 20220-10-29
 
 - Fix a bug where when `enqueued_at` was not set on instance variable lead to failure
